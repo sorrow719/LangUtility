@@ -5,9 +5,7 @@ import java.lang.reflect.Type
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
-import java.time.OffsetDateTime
 import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -113,7 +111,6 @@ class ResultSetWrapper(
                 }
             }
         }
-
         return constructor.callBy(values)
     }
 

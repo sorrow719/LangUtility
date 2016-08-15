@@ -17,6 +17,19 @@ import javafx.util.converter.DefaultStringConverter;
  */
 public class TextAreaTableCell<S, T> extends TableCell<S, T> {
 
+
+    private TextArea textArea;
+    private ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<>(this, "converter");
+
+    public TextAreaTableCell() {
+        this(null);
+    }
+
+    public TextAreaTableCell(StringConverter<T> converter) {
+        this.getStyleClass().add("text-area-table-cell");
+        setConverter(converter);
+    }
+
     public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> forTableColumn() {
         return forTableColumn(new DefaultStringConverter());
     }
@@ -32,19 +45,21 @@ public class TextAreaTableCell<S, T> extends TableCell<S, T> {
 
     private static <T> TextArea createTextArea(final Cell<T> cell, final StringConverter<T> converter) {
         TextArea textArea = new TextArea(getItemText(cell, converter));
+        textArea.setMaxWidth(170);
         textArea.setOnKeyReleased(t -> {
-            if (t.getCode() == KeyCode.ESCAPE) {
-                cell.cancelEdit();
-                t.consume();
-            }
-            else if(t.getCode() == KeyCode.ENTER && t.isShiftDown()) {
-                if (converter == null) {
+            if (t.getCode() == KeyCode.ENTER && t.isShiftDown()) {
+               /* if (converter == null) {
                     throw new IllegalStateException(
                             "Attempting to convert text input into Object, but provided "
                                     + "StringConverter is null. Be sure to set a StringConverter "
-                                    + "in your cell factory.");
-                }
-                cell.commitEdit(converter.fromString(textArea.getText()));
+                                    + "in your cell factory.");*/
+
+                cell.commitEdit((T) (textArea.getText()));
+                t.consume();
+            } else if (t.getCode() == KeyCode.ESCAPE) {
+                cell.cancelEdit();
+                t.consume();
+            } else if (t.getCode() == KeyCode.ENTER) {
                 t.consume();
             }
         });
@@ -52,19 +67,19 @@ public class TextAreaTableCell<S, T> extends TableCell<S, T> {
         return textArea;
     }
 
+    private static <T> void cancelEdit(Cell<T> cell, final StringConverter<T> converter) {
+        cell.setText(getItemText(cell, converter));
+        cell.setGraphic(null);
+
+    }
+
     private void startEdit(final Cell<T> cell, final StringConverter<T> converter) {
         textArea.setText(getItemText(cell, converter));
-
-        cell.setText(null);
+        cell.setText(getItemText(cell, converter));
         cell.setGraphic(textArea);
 
         textArea.selectAll();
         textArea.requestFocus();
-    }
-
-    private static <T> void cancelEdit(Cell<T> cell, final StringConverter<T> converter) {
-        cell.setText(getItemText(cell, converter));
-        cell.setGraphic(null);
     }
 
     private void updateItem(final Cell<T> cell, final StringConverter<T> converter) {
@@ -78,7 +93,7 @@ public class TextAreaTableCell<S, T> extends TableCell<S, T> {
                 if (textArea != null) {
                     textArea.setText(getItemText(cell, converter));
                 }
-                cell.setText(null);
+                cell.setText(textArea.getText());
                 cell.setGraphic(textArea);
             } else {
                 cell.setText(getItemText(cell, converter));
@@ -87,28 +102,16 @@ public class TextAreaTableCell<S, T> extends TableCell<S, T> {
         }
     }
 
-    private TextArea textArea;
-    private ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<>(this, "converter");
-
-    public TextAreaTableCell() {
-        this(null);
-    }
-
-    public TextAreaTableCell(StringConverter<T> converter) {
-        this.getStyleClass().add("text-area-table-cell");
-        setConverter(converter);
-    }
-
     public final ObjectProperty<StringConverter<T>> converterProperty() {
         return converter;
     }
 
-    public final void setConverter(StringConverter<T> value) {
-        converterProperty().set(value);
-    }
-
     public final StringConverter<T> getConverter() {
         return converterProperty().get();
+    }
+
+    public final void setConverter(StringConverter<T> value) {
+        converterProperty().set(value);
     }
 
     @Override

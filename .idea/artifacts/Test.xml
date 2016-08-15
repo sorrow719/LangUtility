@@ -1,0 +1,26 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="Test">
+    <output-path>D:/Distr/artifact</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="com.otoil.langUtility.main.MainApp" />
+        <option name="description" value="" />
+        <option name="htmlParamFile" value="" />
+        <option name="nativeBundle" value="all" />
+        <option name="paramFile" value="" />
+        <option name="title" value="LangUtility" />
+        <option name="vendor" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="module-output" name="LangUtility" />
+      <element id="library" level="application" name="exposed-0.5.0" />
+      <element id="library" level="application" name="ojdbc6" />
+      <element id="library" level="project" name="Maven: no.tornado:tornadofx:1.5.4" />
+      <element id="library" level="project" name="Maven: org.glassfish:javax.json:1.0.4" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.0.3" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-runtime:1.0.3" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-reflect:1.0.3" />
+    </root>
+  </artifact>
+</component>

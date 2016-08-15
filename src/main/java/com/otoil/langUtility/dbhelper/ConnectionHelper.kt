@@ -18,6 +18,7 @@ class ConnectionHelper {
         fun getCurrentConnection(): Connection {
             Class.forName(driver)
             connection = DriverManager.getConnection(url, username, password)
+            connection.autoCommit = false;
             return connection
         }
 

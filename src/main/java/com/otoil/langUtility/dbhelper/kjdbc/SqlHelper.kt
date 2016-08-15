@@ -38,9 +38,9 @@ open class SqlHelper
         val builder = UpdateParameterBuilder()
         builder.block()
         val nameList = builder.nameList
-        val sql = "INSERT INTO $tableName(" +
-                nameList.map{ "`$it`" }.joinToString(",") +
-                ") VALUES(" +
+        val sql = "INSERT INTO $tableName (" +
+                nameList.map { "$it" }.joinToString(",") +
+                ") VALUES (" +
                 nameList.map{ ":$it" }.joinToString(",") +
                 ")"
         return updateSql(sql, builder.parameterMapper())
@@ -75,6 +75,7 @@ open class SqlHelper
         val ps = prepare(sql)
         try {
             return ps.executeUpdate(block)
+
         } finally {
             ps.close()
         }
